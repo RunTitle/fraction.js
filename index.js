@@ -301,8 +301,9 @@ Fraction.prototype.normalize = (function()
         if (isFloat(this.denominator)) {
             var rounded = roundToPlaces(this.denominator, 9);
 
+            var scaleup = 1;
             if (rounded.toString().split('.').length > 1) {
-                var scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
+                scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
                 this.denominator = Math.round(this.denominator * scaleup); // this !!! should be a whole number
             } else {
                 this.denominator = rounded;
@@ -314,8 +315,9 @@ Fraction.prototype.normalize = (function()
         if (isFloat(this.numerator)) {
             var rounded = roundToPlaces(this.numerator, 9);
 
+            var scaleup = 1;
             if (rounded.toString().split('.').length > 1) {
-                var scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
+                scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
                 this.numerator = Math.round(this.numerator * scaleup); // this !!! should be a whole number
             } else {
                 this.numerator = rounded;
