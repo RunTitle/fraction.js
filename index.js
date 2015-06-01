@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 
 /* Fractions */
-/* 
+/*
  *
  * Fraction objects are comprised of a numerator and a denomenator.  These
  * values can be accessed at fraction.numerator and fraction.denomenator.
@@ -264,7 +264,7 @@ Fraction.prototype.equals = function(b)
 
 /* Utility functions */
 
-/* Destructively normalize the fraction to its smallest representation. 
+/* Destructively normalize the fraction to its smallest representation.
  * e.g. 4/16 -> 1/4, 14/28 -> 1/2, etc.
  * This is called after all math ops.
  */
@@ -274,12 +274,12 @@ Fraction.prototype.normalize = (function()
     var isFloat = function(n)
     {
         return (typeof(n) === 'number' &&
-                ((n > 0 && n % 1 > 0 && n % 1 < 1) || 
+                ((n > 0 && n % 1 > 0 && n % 1 < 1) ||
                  (n < 0 && n % -1 < 0 && n % -1 > -1))
                );
     }
 
-    var roundToPlaces = function(n, places) 
+    var roundToPlaces = function(n, places)
     {
         if (!places) {
             return Math.round(n);
@@ -288,7 +288,7 @@ Fraction.prototype.normalize = (function()
             return Math.round(n*scalar)/scalar;
         }
     }
-        
+
     return (function() {
 
         // XXX hackish.  Is there a better way to address this issue?
@@ -300,15 +300,27 @@ Fraction.prototype.normalize = (function()
          */
         if (isFloat(this.denominator)) {
             var rounded = roundToPlaces(this.denominator, 9);
-            var scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
-            this.denominator = Math.round(this.denominator * scaleup); // this !!! should be a whole number
+
+            if (rounded.toString().split('.').length > 1) {
+                var scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
+                this.denominator = Math.round(this.denominator * scaleup); // this !!! should be a whole number
+            } else {
+                this.denominator = rounded;
+            }
+
             //this.numerator *= scaleup;
             this.numerator *= scaleup;
-        } 
+        }
         if (isFloat(this.numerator)) {
             var rounded = roundToPlaces(this.numerator, 9);
-            var scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
-            this.numerator = Math.round(this.numerator * scaleup); // this !!! should be a whole number
+
+            if (rounded.toString().split('.').length > 1) {
+                var scaleup = Math.pow(10, rounded.toString().split('.')[1].length);
+                this.numerator = Math.round(this.numerator * scaleup); // this !!! should be a whole number
+            } else {
+                this.numerator = rounded;
+            }
+
             //this.numerator *= scaleup;
             this.denominator *= scaleup;
         }
@@ -358,9 +370,9 @@ Fraction.gcf = function(a, b) {
 };
 
 //Not needed now
-// Adapted from: 
+// Adapted from:
 // http://www.btinternet.com/~se16/js/factor.htm
-Fraction.primeFactors = function(n) 
+Fraction.primeFactors = function(n)
 {
 
     var num = Math.abs(n);
@@ -368,9 +380,9 @@ Fraction.primeFactors = function(n)
     var _factor = 2;  // first potential prime factor
 
     while (_factor * _factor <= num)  // should we keep looking for factors?
-    {      
+    {
       if (num % _factor === 0)  // this is a factor
-        { 
+        {
             factors.push(_factor);  // so keep it
             num = num/_factor;  // and divide our search point by it
         }
